@@ -4,3 +4,4 @@ networkx
 pyvis
 PyPDF2
 plotly
+scipy
