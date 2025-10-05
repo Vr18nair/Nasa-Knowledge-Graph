@@ -13,13 +13,22 @@ st.set_page_config(page_title="NASA Bioscience Knowledge Graph", layout="wide")
 st.title("🔬 NASA Bioscience Knowledge Graph Explorer")
 st.markdown("**Interactive analysis of relationships extracted from NASA bioscience research papers**")
 
-# Load data
 @st.cache_data
 def load_data():
-    G = nx.read_graphml(os.path.join(BASE_DIR, "nasa_merged_graph.graphml"))
-    nodes_df = pd.read_csv(os.path.join(BASE_DIR, "nasa_nodes.csv"))
-    edges_df = pd.read_csv(os.path.join(BASE_DIR, "nasa_edges.csv"))
+    graph_path = os.path.join(BASE_DIR, "nasa_merged_graph.graphml")
+    nodes_path = os.path.join(BASE_DIR, "nasa_nodes.csv")
+    edges_path = os.path.join(BASE_DIR, "nasa_edges.csv")
+
+    if not (os.path.exists(graph_path) and os.path.exists(nodes_path) and os.path.exists(edges_path)):
+        st.error("⚠️ One or more data files are missing in the repo.")
+        st.stop()
+
+    G = nx.read_graphml(graph_path)
+    nodes_df = pd.read_csv(nodes_path)
+    edges_df = pd.read_csv(edges_path)
     
+    return G, nodes_df, edges_df
+  
 try:
     G, nodes_df, edges_df = load_data()
 except FileNotFoundError:
