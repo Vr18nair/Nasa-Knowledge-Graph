@@ -4,6 +4,9 @@ import pandas as pd
 import plotly.graph_objects as go
 from collections import Counter
 import re
+import os
+BASE_DIR = os.path.dirname(__file__)
+
 
 st.set_page_config(page_title="NASA Bioscience Knowledge Graph", layout="wide")
 
@@ -13,11 +16,10 @@ st.markdown("**Interactive analysis of relationships extracted from NASA bioscie
 # Load data
 @st.cache_data
 def load_data():
-    G = nx.read_graphml("/content/nasa_merged_graph.graphml")
-    nodes_df = pd.read_csv("/content/nasa_nodes.csv")
-    edges_df = pd.read_csv("/content/nasa_edges.csv")
-    return G, nodes_df, edges_df
-
+    G = nx.read_graphml(os.path.join(BASE_DIR, "nasa_merged_graph.graphml"))
+    nodes_df = pd.read_csv(os.path.join(BASE_DIR, "nasa_nodes.csv"))
+    edges_df = pd.read_csv(os.path.join(BASE_DIR, "nasa_edges.csv"))
+    
 try:
     G, nodes_df, edges_df = load_data()
 except FileNotFoundError:
